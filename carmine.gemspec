@@ -9,11 +9,28 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Genadi Samokovarov"]
-  s.date = "2012-02-27"
+  s.date = "2012-02-28"
   s.description = "Ruby client for pygmentize.me"
   s.email = "gsamokovarov@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE"
+  ]
+  s.files = [
+    "Gemfile",
+    "Gemfile.lock",
+    "Guardfile",
+    "LICENSE",
+    "Rakefile",
+    "Readme.markdown",
+    "VERSION",
+    "carmine.gemspec",
+    "lib/carmine.rb",
+    "lib/carmine/version.rb",
+    "spec/carmine/version_spec.rb",
+    "spec/carmine_spec.rb",
+    "spec/spec_helper.rb",
+    "tasks/gem.rake",
+    "tasks/spec.rake"
   ]
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
