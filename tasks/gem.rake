@@ -14,3 +14,5 @@ Jeweler::Tasks.new do |gem|
 
   gem.add_dependency 'httparty'
 end
+
+Jeweler::RubygemsDotOrgTasks.new

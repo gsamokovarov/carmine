@@ -14,7 +14,8 @@ class Carmine
     end
 
     def to_s
-      @response.body.match(/\(.*?\)/, &:to_s).gsub(/[()]/, "")
+      return @response.body unless /\(.*?\)/ =~ @response.body
+      $~.gsub /[()]/, ""
     end
   end
 
