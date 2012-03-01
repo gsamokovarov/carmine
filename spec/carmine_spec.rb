@@ -1,4 +1,22 @@
 describe Carmine do
+  before do
+    Carmine.base_uri ENV['base_uri'] if ENV['base_uri']
+  end
+
+  describe '::Error' do
+    it 'should extract /\(.*?\)/' do
+      response = Struct.new(:body).new('Skipped and (showed)')
+
+      Carmine::Error.new(response).to_s.should == 'showed'
+    end
+
+    it 'should extract /\(.*?\)/ only if present' do
+      response = Struct.new(:body).new('Still fine')
+
+      Carmine::Error.new(response).to_s.should == 'Still fine'
+    end
+  end
+
   describe '#initialize' do
     it 'should accept options used as defaults' do
       carmine = Carmine.new :lexer => :ruby, :formatter => :latex
@@ -12,16 +30,17 @@ describe Carmine do
     describe "#{access}colorize" do
       let(:carmine) { access == '::' ? Carmine : Carmine.new }
 
-      it 'should colorize code with valid lexer and formatter' do
+      it 'should colorize code :lexer and :formatter' do
         carmine.colorize('puts "Hello World!"', :lexer => :ruby, :formatter => 'html').should ==
           %Q{<div class="highlight"><pre><span class="nb">puts</span> <span class="s2">&quot;Hello World!&quot;</span>\n</pre></div>\n}
       end
 
-
       it 'should throw Carmine::Error on server side errors' do
-        expect {
+        colorization = proc do
           carmine.colorize 'pass', :lexer => :python, :formatter => :invalid
-        }.to raise_error(Carmine::Error)
+        end
+
+        expect { colorization.call }.to raise_error(Carmine::Error)
       end
 
       it 'should raise ArgumentError on missing code' do

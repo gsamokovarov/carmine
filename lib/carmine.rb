@@ -15,12 +15,12 @@ class Carmine
 
     def to_s
       return @response.body unless /\(.*?\)/ =~ @response.body
-      $~.gsub /[()]/, ""
+      $~[0].gsub /[()]/, ""
     end
   end
 
   class << self
-    # Public: Delegates the calls to '#colorize', '#pygmentize' and #defaults.
+    # Public: Delegates the calls to the #instance_methods.
     #
     # Examples
     #
