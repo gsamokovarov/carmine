@@ -1,4 +1,4 @@
-guard :rspec, :cli => '-f doc -r "spec_helper" -c' do
+guard :rspec, :cli => '--format documentation --require "spec_helper" --color' do
   watch(%r{^lib/(.+)\.rb$})  { 'spec' }
   watch(%r{^spec/(.+)\.rb$}) { 'spec' }
 end

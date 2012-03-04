@@ -41,5 +41,6 @@ DEPENDENCIES
   guard-rspec
   httparty
   jeweler
+  json
   rake
   rspec

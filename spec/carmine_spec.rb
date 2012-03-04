@@ -31,8 +31,13 @@ describe Carmine do
       let(:carmine) { access == '::' ? Carmine : Carmine.new }
 
       it 'should colorize code :lexer and :formatter' do
-        carmine.colorize('puts "Hello World!"', :lexer => :ruby, :formatter => 'html').should ==
+        carmine.colorize('puts "Hello World!"', :lexer => :ruby, :formatter => :html).should ==
           %Q{<div class="highlight"><pre><span class="nb">puts</span> <span class="s2">&quot;Hello World!&quot;</span>\n</pre></div>\n}
+      end
+
+      it 'should convert arrays and hashes to JSON' do
+        carmine.colorize('puts "Hello World!"', :lexer => :ruby, :options => { :cssclass => :color }).should ==
+          %Q{<div class="color"><pre><span class="nb">puts</span> <span class="s2">&quot;Hello World!&quot;</span>\n</pre></div>\n}
       end
 
       it 'should throw Carmine::Error on server side errors' do

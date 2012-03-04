@@ -1,6 +1,7 @@
 source :gemcutter
 
 gem 'httparty'
+gem 'json'
 
 group :development do
   gem 'rake'

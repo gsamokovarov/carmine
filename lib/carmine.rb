@@ -1,11 +1,12 @@
+require 'json'
 require 'httparty'
 
 class Carmine
   include HTTParty
 
-  # Public: The base error for the library.
+  # Public: The base error for the client.
   #
-  # Raised when there is something wrong with the colorization request. 
+  # Raised when there is something wrong with the colorization request.
   class Error < StandardError
     attr_reader :response
 
@@ -25,7 +26,12 @@ class Carmine
     # Examples
     #
     #   Carmine.colorize "puts 'Hello World!'", :lexer => :ruby
+    #   # Calls `Colorize.send(:instance).colorize(*args)`.
+    #
     #   Carmine.pygmentize "puts 'Hello World!'", :lexer => :ruby
+    #   # Calls `Colorize.send(:pygmentize).colorize(*args)`.
+    #
+    # Returns the delegated method call result.
     def method_missing(name, *args, &block)
       if instance.respond_to? name
         instance.send name, *args, &block
@@ -41,6 +47,7 @@ class Carmine
     end
   end
 
+  # Public: Sets the default server uri (default: 'pygmentize me').
   base_uri 'pygmentize.me'
 
   # Public: Gets/Sets the client default options.
@@ -67,7 +74,7 @@ class Carmine
   #           :formatter - The name of the formatter to use (optional).
   #           :lexer     - The name of the lexer to use (optiona).
   #
-  # Examples 
+  # Examples
   #
   #   colorize "puts 'Hello World!'", :lexer => :ruby, :formatter => :text
   #   # => "puts 'Hello World!'"
@@ -83,7 +90,7 @@ class Carmine
 
     raise ArgumentError, "Argument or option :code missing" if params[:code].nil?
 
-    response = post "/api/formatter/#{options[:formatter]}", :query => params
+    response = post "/api/formatter/#{params.delete :formatter}", :query => params
 
     raise Error, response unless response.success?
 
@@ -99,8 +106,11 @@ class Carmine
   private
 
   def post(path, options = {})
+    options[:query_string_normalizer] ||= Conversion.method :to_params
+
     self.class.post path, @defaults.merge(options)
   end
 end
 
 require 'carmine/version'
+require 'carmine/conversion'
